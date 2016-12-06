@@ -1,4 +1,4 @@
-package com.example.plugin;
+package com.dorknstein.plugin;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Hello extends CordovaPlugin {
+public class androidPay extends CordovaPlugin {
 
     private String mEnv;
 
@@ -37,8 +37,8 @@ public class Hello extends CordovaPlugin {
 
             String name = data.getString(0);
             String message = "Hello, " + name;
-            createMaskedWalletRequest("0.01", callbackContext);
-            // callbackContext.success(message);
+            // createMaskedWalletRequest("0.01", callbackContext);
+            callbackContext.success(message);
 
             return true;
 

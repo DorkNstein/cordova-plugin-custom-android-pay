@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" id="com.example.hello" version="0.1.0">
-    <name>Hello</name>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" id="cordova-plugin-custom-android-pay" version="0.1.0">
+    <name>AndroidPay</name>
     <engines>
         <engine name="cordova" version=">=3.4.0" />
     </engines>
-    <asset src="www/hello.js" target="js/hello.js" />
-    <js-module src="www/hello.js" name="hello">
-        <clobbers target="hello" />
+    <asset src="www/android-pay.js" target="js/android-pay.js" />
+    <js-module src="www/android-pay.js" name="androidPay">
+        <clobbers target="androidPay" />
     </js-module>
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Hello">
-                <param name="android-package" value="com.example.plugin.Hello" />
+            <feature name="androidPay">
+                <param name="android-package" value="com.dorknstein.plugin.androidPay" />
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -31,6 +31,6 @@
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.USE_CREDENTIALS" tools:node="remove" />
         </config-file>
-        <source-file src="src/android/Hello.java" target-dir="src/com/example/plugin/" />
+        <source-file src="src/android/android-pay.java" target-dir="src/com/dorknstein/plugin/" />
     </platform>
 </plugin>
