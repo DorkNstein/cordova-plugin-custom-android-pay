@@ -4,8 +4,8 @@
     <engines>
         <engine name="cordova" version=">=3.4.0" />
     </engines>
-    <asset src="www/android-pay.js" target="js/android-pay.js" />
-    <js-module src="www/android-pay.js" name="androidPay">
+    <asset src="www/androidPay.js" target="js/androidPay.js" />
+    <js-module src="www/androidPay.js" name="androidPay">
         <clobbers target="androidPay" />
     </js-module>
     <platform name="android">
@@ -31,6 +31,6 @@
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
             <uses-permission android:name="android.permission.USE_CREDENTIALS" tools:node="remove" />
         </config-file>
-        <source-file src="src/android/android-pay.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/androidPay.java" target-dir="src/com/dorknstein/plugin/" />
     </platform>
 </plugin>
