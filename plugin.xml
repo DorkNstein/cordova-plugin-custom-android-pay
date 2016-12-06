@@ -29,7 +29,7 @@
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.USE_CREDENTIALS" tools:node="remove" />
+            <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
         </config-file>
         <source-file src="src/android/androidPay.java" target-dir="src/com/dorknstein/plugin/" />
     </platform>
