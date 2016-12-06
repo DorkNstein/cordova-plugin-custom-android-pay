@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" id="com.example.hello" version="0.1.0">
+    <name>Hello</name>
+    <engines>
+        <engine name="cordova" version=">=3.4.0" />
+    </engines>
+    <asset src="www/hello.js" target="js/hello.js" />
+    <js-module src="www/hello.js" name="hello">
+        <clobbers target="hello" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Hello">
+                <param name="android-package" value="com.example.plugin.Hello" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+            <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
+            <activity android:name="CheckoutActivity" android:label="@string/title_checkout" />
+            <activity android:name="ConfirmationActivity" android:label="@string/title_confirmation" />
+            <activity android:name="ResponseActivity" android:label="FirstAPI Response" />
+            <receiver android:name="com.google.android.gms.wallet.EnableWalletOptimizationReceiver" android:exported="false">
+                <intent-filter>
+                    <action android:name="com.google.android.gms.wallet.ENABLE_WALLET_OPTIMIZATION" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.USE_CREDENTIALS" tools:node="remove" />
+        </config-file>
+        <source-file src="src/android/Hello.java" target-dir="src/com/example/plugin/" />
+    </platform>
+</plugin>
