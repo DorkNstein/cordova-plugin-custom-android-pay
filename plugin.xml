@@ -6,7 +6,7 @@
     </engines>
     <asset src="www/androidPay.js" target="js/androidPay.js" />
     <js-module src="www/androidPay.js" name="androidPay">
-        <clobbers target="androidPay" />
+        <clobbers target="cordova.plugins.AndroidPay" />
     </js-module>
     <platform name="android">
         <framework src="com.google.android.gms:play-services-wallet:9+" value="gradle" />
