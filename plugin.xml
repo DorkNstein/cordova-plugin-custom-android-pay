@@ -4,7 +4,6 @@
     <engines>
         <engine name="cordova" version=">=3.4.0" />
     </engines>
-    <asset src="www/androidPay.js" target="js/androidPay.js" />
     <js-module src="www/androidPay.js" name="androidPay">
         <clobbers target="cordova.plugins.AndroidPay" />
     </js-module>
