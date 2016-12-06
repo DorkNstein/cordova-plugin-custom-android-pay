@@ -1,4 +1,5 @@
-# Cordova Hello World Plugin
+# Cordova android pay Plugin
+# Still under development..
 
 Simple plugin that returns your string prefixed with hello.
 
