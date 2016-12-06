@@ -1,5 +1,5 @@
 {
-  "name": "android-pay",
+  "name": "androidPay",
   "version": "0.1.0",
   "description": "Cordova Plugin for android-pay",
   "cordova": {
