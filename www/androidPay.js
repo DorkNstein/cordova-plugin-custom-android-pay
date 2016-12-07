@@ -1,11 +1,11 @@
 /*global cordova, module*/
 
 module.exports = {
-    greet: function (name, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "androidPay", "greet", [name]);
+    buy: function (amount, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "androidPay", "buy", [amount]);
     },
 
-    isReady: function (name, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "androidPay", "greet", [name]);
+    isReady: function (amount, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "androidPay", "buy", [amount]);
     }
 };

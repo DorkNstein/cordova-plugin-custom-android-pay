@@ -50,12 +50,12 @@ public class androidPay extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
 
-        if (action.equals("greet")) {
+        if (action.equals("buy")) {
 
-            String name = data.getString(0);
-            String message = "Hello, " + name;
+            String amount = data.getString(0);
+            String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
-            maskedWalletRequest = createMaskedWalletRequest('0.01');
+            maskedWalletRequest = createMaskedWalletRequest(amount);
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
                 .enableAutoManage(this, 0, this)
