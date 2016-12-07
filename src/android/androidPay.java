@@ -41,6 +41,7 @@ import com.google.android.gms.wallet.PaymentMethodTokenizationType;
 import com.google.android.gms.wallet.PaymentMethodToken;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
+import com.google.android.gms.wallet.IsReadyToPayRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class androidPay extends CordovaPlugin {
 
     public static final int WALLET_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
 
-    public static final String MERCHANT_NAME = "First data Corporation";
+    public static final String MERCHANT_NAME = "Mendr";
 
     // Intent extra keys
     public static final String EXTRA_ITEM_ID = "com.dorkstein.plugin.androidpay.EXTRA_ITEM_ID";
@@ -104,25 +105,32 @@ public class androidPay extends CordovaPlugin {
     private Context context;
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
+        context = this.cordova.getActivity().getApplicationContext(); 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
-                    .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
+                    .setEnvironment(WalletConstants.ENVIRONMENT_PRODUCTION)
                     .setTheme(WalletConstants.THEME_LIGHT)
                     .build())
                 .build();
         if (action.equals("buy")) {
-            context = this.cordova.getActivity().getApplicationContext(); 
             String amount = data.getString(0);
             String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
+            Wallet.Payments.loadMaskedWallet(mGoogleApiClient, maskedWalletRequest, REQUEST_CODE_MASKED_WALLET);
             callbackContext.success(message);
             return true;
 
         } else if (action.equals("isReady")){
-            Wallet.Payments.isReadyToPay(mGoogleApiClient).setResultCallback(  
+            IsReadyToPayRequest req = IsReadyToPayRequest.newBuilder()
+                .addAllowedCardNetwork(WalletConstants.CardNetwork.MASTERCARD)
+                .addAllowedCardNetwork(WalletConstants.CardNetwork.VISA)
+                .addAllowedCardNetwork(WalletConstants.CardNetwork.AMEX)
+                .addAllowedCardNetwork(WalletConstants.CardNetwork.DISCOVER)
+                .build();
+            Wallet.Payments.isReadyToPay(mGoogleApiClient, req).setResultCallback(  
                 new ResultCallback<BooleanResult>() {  
-                @Override  
+                @Override
                 public void onResult(@NonNull BooleanResult booleanResult) {  
                     if (booleanResult.getStatus().isSuccess()) {  
                         if (booleanResult.getValue()) { 
@@ -142,8 +150,9 @@ public class androidPay extends CordovaPlugin {
                     }  
                 }  
             });
+            // callbackContext.success("still not done");
             return true;
-        }else {
+        } else {
             callbackContext.error("Wrong message!");
             return false;
 
@@ -230,7 +239,7 @@ public class androidPay extends CordovaPlugin {
               .setTotalPrice("10.10")
               .addLineItem(LineItem.newBuilder()
                   .setCurrencyCode("USD")
-                  .setDescription("Google I/O Sticker")
+                  .setDescription("Mendr Sticker")
                   .setQuantity("1")
                   .setUnitPrice("10.00")
                   .setTotalPrice("10.00")
