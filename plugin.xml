@@ -26,8 +26,16 @@
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+            <uses-permission android:name="android.permission.USE_CREDENTIALS" />
         </config-file>
         <source-file src="src/android/androidPay.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/CheckoutActivity.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/ConfirmationActivity.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/Constants.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/EnvData.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/EnvProperties.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/FullWalletConfirmationButtonFragment.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/MainActivity.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/ResponseActivity.java" target-dir="src/com/dorknstein/plugin/" />
     </platform>
 </plugin>
