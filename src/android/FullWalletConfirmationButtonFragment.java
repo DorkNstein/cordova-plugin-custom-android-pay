@@ -394,7 +394,7 @@ public class FullWalletConfirmationButtonFragment extends Fragment
     }
 
     private List<LineItem> buildLineItems(String amount) {
-        List<LineItem> list = new ArrayList<>();
+        List<LineItem> list = new ArrayList<LineItem>();
         list.add(LineItem.newBuilder()
                 .setCurrencyCode(Constants.CURRENCY_CODE_USD)
                 .setDescription("Tesla model S")

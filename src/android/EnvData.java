@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class EnvData {
 
-    private static Map<String, EnvProperties> envMap = new HashMap<>();
+    private static Map<String, EnvProperties> envMap = new HashMap<String, EnvProperties>();
 
     private static class EnvPropertiesImpl implements EnvProperties {
 
