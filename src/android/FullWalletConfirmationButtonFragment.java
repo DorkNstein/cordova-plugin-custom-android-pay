@@ -533,7 +533,7 @@ public class FullWalletConfirmationButtonFragment extends Fragment
 
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headerMap = new HashMap<>(HMACMap);
+                    Map<String, String> headerMap = new HashMap<String, String>(HMACMap);
                     //  First data issued APIKey identifies the developer
                     headerMap.put("apikey", EnvData.getProperties(mEnv).getApiKey());
                     //  First data issued token identifies the merchant
@@ -606,19 +606,19 @@ public class FullWalletConfirmationButtonFragment extends Fragment
      * @return JSON Object containg the request payload
      */
     private JSONObject getRequestPayload(String data, String signature, String ephemeralPublicKey) {
-        Map<String, Object> pm = new HashMap<>();
+        Map<String, Object> pm = new HashMap<String, Object>();
         pm.put("merchant_ref", "orderid");
         pm.put("transaction_type", "purchase");
         pm.put("method", "3DS");
         pm.put("amount", formatAmount(mAmount));
         pm.put("currency_code", "USD");
 
-        Map<String, String> headerMap = new HashMap<>();
+        Map<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("ephemeralPublicKey", ephemeralPublicKey);
         //  First data issued Public Key Hash identifies the public key used to encrypt the data
         headerMap.put("publicKeyHash", EnvData.getProperties(mEnv).getPublicKeyHash());
 
-        Map<String, Object> ccmap = new HashMap<>();
+        Map<String, Object> ccmap = new HashMap<String, Object>();
         ccmap.put("type", "G");             //  Identify the request as Android Pay request
         ccmap.put("data", data);
         ccmap.put("signature", signature);
@@ -643,7 +643,7 @@ public class FullWalletConfirmationButtonFragment extends Fragment
         String apiKey = ep.getApiKey();
         String token = ep.getToken();
 
-        Map<String, String> headerMap = new HashMap<>();
+        Map<String, String> headerMap = new HashMap<String, String>();
         if (apiSecret != null) {
             try {
                 String authorizeString;
@@ -717,7 +717,7 @@ public class FullWalletConfirmationButtonFragment extends Fragment
         private WeakReference<FullWalletConfirmationButtonFragment> mWeakReference;
 
         protected RetryHandler(FullWalletConfirmationButtonFragment fragment) {
-            mWeakReference = new WeakReference<>(fragment);
+            mWeakReference = new WeakReference<FullWalletConfirmationButtonFragment>(fragment);
         }
 
         @Override
