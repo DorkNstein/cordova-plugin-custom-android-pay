@@ -9,7 +9,7 @@
     </js-module>
     <platform name="android"> 
         <framework src="com.google.android.gms:play-services-wallet:9+" value="gradle" />
-        <framework src="com.android.volley:volley:1.0.0" value="gradle" />
+        <framework src="com.mcxiaoke.volley:library:1.0.19" value="gradle" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="androidPay">
                 <param name="android-package" value="com.dorknstein.plugin.androidPay" />
