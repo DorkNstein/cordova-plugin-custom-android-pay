@@ -7,8 +7,9 @@
     <js-module src="www/androidPay.js" name="androidPay">
         <clobbers target="cordova.plugins.AndroidPay" />
     </js-module>
-    <platform name="android">
+    <platform name="android"> 
         <framework src="com.google.android.gms:play-services-wallet:9+" value="gradle" />
+        <framework src="com.android.volley:volley:1+" value="gradle" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="androidPay">
                 <param name="android-package" value="com.dorknstein.plugin.androidPay" />
