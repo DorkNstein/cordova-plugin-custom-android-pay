@@ -10,23 +10,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.android.gms.wallet.Cart;
-import com.google.android.gms.wallet.LineItem;
-import com.google.android.gms.wallet.MaskedWallet;
-import com.google.android.gms.wallet.MaskedWalletRequest;
-import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
-import com.google.android.gms.wallet.PaymentMethodTokenizationType;
-import com.google.android.gms.wallet.WalletConstants;
-import com.google.android.gms.wallet.fragment.SupportWalletFragment;
-import com.google.android.gms.wallet.fragment.WalletFragmentInitParams;
-import com.google.android.gms.wallet.fragment.WalletFragmentMode;
-import com.google.android.gms.wallet.fragment.WalletFragmentOptions;
-import com.google.android.gms.wallet.fragment.WalletFragmentStyle;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.wallet.Cart;
+import com.google.android.gms.wallet.FullWallet;
+import com.google.android.gms.wallet.FullWalletRequest;
+import com.google.android.gms.wallet.LineItem;
+import com.google.android.gms.wallet.MaskedWallet;
+import com.google.android.gms.wallet.MaskedWalletRequest;
+import com.google.android.gms.wallet.PaymentMethodTokenizationParameters;
+import com.google.android.gms.wallet.PaymentMethodTokenizationType;
+import com.google.android.gms.wallet.PaymentMethodToken;
+import com.google.android.gms.wallet.Wallet;
+import com.google.android.gms.wallet.WalletConstants;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +55,7 @@ public class androidPay extends CordovaPlugin {
             String name = data.getString(0);
             String message = "Hello, " + name;
             // createMaskedWalletRequest("0.01", callbackContext);
-            maskedWalletRequest = createMaskedWalletRequest(amountText);
+            maskedWalletRequest = createMaskedWalletRequest('0.01');
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addOnConnectionFailedListener(this)
                 .enableAutoManage(this, 0, this)
