@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -165,15 +166,15 @@ public class androidPay extends CordovaPlugin {
             case REQUEST_CODE_MASKED_WALLET:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        mMaskedWallet =  data
+                        maskedWalletRequest =  data
                                 .getParcelableExtra(WalletConstants.EXTRA_MASKED_WALLET);
-                        Toast.makeText(getActivity(), "Got Masked Wallet", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getActivity(), "Got Masked Wallet", Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
                         // The user canceled the operation
                         break;
                     case WalletConstants.RESULT_ERROR:
-                        Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
                         // callbackContext.error("An Error Occurred!");
                         break;
                 }
@@ -184,13 +185,13 @@ public class androidPay extends CordovaPlugin {
                         mFullWallet = data
                                 .getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
                         // Show the credit card number
-                        Toast.makeText(getActivity(),
+                        // Toast.makeText(getActivity(),
                                 "Got Full Wallet, Done!",
                                 Toast.LENGTH_SHORT).show();
                         // callbackContext.success(mFullWallet.getPaymentMethodToken());
                         break;
                     case WalletConstants.RESULT_ERROR:
-                        Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
                         // callbackContext.error("An Error Occurred during Full Wallet Request!");
                         break;
                 }
@@ -220,16 +221,6 @@ public class androidPay extends CordovaPlugin {
               .build())
           .build();
       return fullWalletRequest;
-    }
-
-    public void requestFullWallet() {
-      if (maskedWalletRequest == null) {
-        Toast.makeText(getActivity(), "No masked wallet, can't confirm", Toast.LENGTH_SHORT).show();
-        return;
-      } 
-      Wallet.Payments.loadFullWallet(mGoogleApiClient,
-          generateFullWalletRequest(maskedWalletRequest.getGoogleTransactionId()),
-          FULL_WALLET_REQUEST_CODE);
     }
 }
 
