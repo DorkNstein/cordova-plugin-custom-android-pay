@@ -5,9 +5,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.os.Parcelable;
 import android.widget.Toast;
 
@@ -22,6 +25,8 @@ import com.android.volley.toolbox.Volley;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -90,7 +95,7 @@ public class androidPay extends CordovaPlugin {
     private static final int MAX_FULL_WALLET_RETRIES = 1;
     private static final String KEY_RETRY_FULL_WALLET_COUNTER = "KEY_RETRY_FULL_WALLET_COUNTER";
 
-
+    private static final String TAG = "CheckoutActivity";
     private String mEnv;
     private GoogleApiClient mGoogleApiClient;
     public static final int FULL_WALLET_REQUEST_CODE = 889;
@@ -98,25 +103,47 @@ public class androidPay extends CordovaPlugin {
     private MaskedWalletRequest maskedWalletRequest;
     private Context context;
     @Override
-    public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
-
+    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
+                    .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
+                    .setTheme(WalletConstants.THEME_LIGHT)
+                    .build())
+                .build();
         if (action.equals("buy")) {
             context = this.cordova.getActivity().getApplicationContext(); 
             String amount = data.getString(0);
             String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
-                    .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
-                    .setTheme(WalletConstants.THEME_LIGHT)
-                    .build())
-                .build();
-            callbackContext.success(message, maskedWalletRequest, mGoogleApiClient);
-
+            callbackContext.success(message);
             return true;
 
-        } else {
+        } else if (action.equals("isReady")){
+            Wallet.Payments.isReadyToPay(mGoogleApiClient).setResultCallback(  
+                new ResultCallback<BooleanResult>() {  
+                @Override  
+                public void onResult(@NonNull BooleanResult booleanResult) {  
+                    if (booleanResult.getStatus().isSuccess()) {  
+                        if (booleanResult.getValue()) { 
+                            callbackContext.success("ashow androuid buttons");
+                            // Show Android Pay buttons alongside regular checkout button  
+                            // ...  
+                        } else { 
+                            callbackContext.success("cannot be used");
+                            // Hide Android Pay buttons, show a message that Android Pay  
+                            // cannot be used yet, and display a traditional checkout button  
+                            // ...  
+                        }  
+                    } else {  
+                        // Error making isReadyToPay call  
+                        Log.e(TAG, "isReadyToPay:" + booleanResult.getStatus()); 
+                        callbackContext.error("error making isReadyToPay call") ;
+                    }  
+                }  
+            });
+            return true;
+        }else {
             callbackContext.error("Wrong message!");
             return false;
 
@@ -137,7 +164,7 @@ public class androidPay extends CordovaPlugin {
 
         MaskedWalletRequest maskedWalletRequest =
                 MaskedWalletRequest.newBuilder()
-                        .setMerchantName("Google I/O Codelab")
+                        .setMerchantName("Mendr")
                         .setPhoneNumberRequired(true)
                         .setShippingAddressRequired(true)
                         .setCurrencyCode("USD")
@@ -146,7 +173,7 @@ public class androidPay extends CordovaPlugin {
                                 .setTotalPrice(amount)
                                 .addLineItem(LineItem.newBuilder()
                                         .setCurrencyCode("USD")
-                                        .setDescription("Google I/O Sticker")
+                                        .setDescription("Mendr Sticker")
                                         .setQuantity("1")
                                         .setUnitPrice("10.00")
                                         .setTotalPrice("10.00")
@@ -219,5 +246,3 @@ public class androidPay extends CordovaPlugin {
       return fullWalletRequest;
     }
 }
-
-

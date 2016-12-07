@@ -6,6 +6,6 @@ module.exports = {
     },
 
     isReady: function (amount, successCallback, errorCallback) {
-        cordova.exec(successCallback, errorCallback, "androidPay", "buy", [amount]);
+        cordova.exec(successCallback, errorCallback, "androidPay", "isReady", [amount]);
     }
 };
