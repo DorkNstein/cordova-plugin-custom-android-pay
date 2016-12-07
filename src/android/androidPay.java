@@ -107,8 +107,6 @@ public class androidPay extends CordovaPlugin {
             // createMaskedWalletRequest("0.01", callbackContext);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
             mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(context)
-                .addOnConnectionFailedListener(context)
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
                     .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
                     .setTheme(WalletConstants.THEME_LIGHT)
