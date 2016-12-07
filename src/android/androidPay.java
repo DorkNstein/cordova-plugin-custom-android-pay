@@ -106,9 +106,7 @@ public class androidPay extends CordovaPlugin {
             String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addOnConnectionFailedListener(this)
-                .enableAutoManage(this, 0, this)
+            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
                     .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
                     .setTheme(WalletConstants.THEME_LIGHT)
@@ -125,7 +123,7 @@ public class androidPay extends CordovaPlugin {
         }
     }
 
-    private MaskedWalletRequest generateMaskedWalletRequest() {
+    private MaskedWalletRequest generateMaskedWalletRequest(String amount) {
         // This is just an example publicKey for the purpose of this codelab. 
         // To learn how to generate your own visit:
         // https://github.com/android-pay/androidpay-quickstart
@@ -145,7 +143,7 @@ public class androidPay extends CordovaPlugin {
                         .setCurrencyCode("USD")
                         .setCart(Cart.newBuilder()
                                 .setCurrencyCode("USD")
-                                .setTotalPrice("10.00")
+                                .setTotalPrice(amount)
                                 .addLineItem(LineItem.newBuilder()
                                         .setCurrencyCode("USD")
                                         .setDescription("Google I/O Sticker")
@@ -186,8 +184,8 @@ public class androidPay extends CordovaPlugin {
                                 .getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
                         // Show the credit card number
                         // Toast.makeText(getActivity(),
-                                "Got Full Wallet, Done!",
-                                Toast.LENGTH_SHORT).show();
+                                // "Got Full Wallet, Done!",
+                                // Toast.LENGTH_SHORT).show();
                         // callbackContext.success(mFullWallet.getPaymentMethodToken());
                         break;
                     case WalletConstants.RESULT_ERROR:
