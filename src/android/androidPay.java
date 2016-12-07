@@ -41,6 +41,55 @@ import java.util.List;
 
 public class androidPay extends CordovaPlugin {
 
+    public static final int WALLET_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST;
+
+    public static final String MERCHANT_NAME = "First data Corporation";
+
+    // Intent extra keys
+    public static final String EXTRA_ITEM_ID = "com.dorkstein.plugin.androidpay.EXTRA_ITEM_ID";
+    public static final String EXTRA_MASKED_WALLET = "com.dorkstein.plugin.androidpay.EXTRA_MASKED_WALLET";
+
+    public static final String EXTRA_AMOUNT = "com.dorkstein.plugin.androidpay.EXTRA_AMOUNT";
+    public static final String EXTRA_ENV = "com.dorkstein.plugin.androidpay.EXTRA_ENV";
+
+    public static final String EXTRA_RESULT_STATUS = "com.dorkstein.plugin.androidpay.EXTRA_RESULT_STATUS";
+    public static final String EXTRA_RESULT_MESSAGE = "com.dorkstein.plugin.androidpay.EXTRA_RESULT_MESSAGE";
+
+    public static final String CURRENCY_CODE_USD = "USD";
+
+    // values to use with KEY_DESCRIPTION
+    public static final String DESCRIPTION_LINE_ITEM_SHIPPING = "Shipping";
+    public static final String DESCRIPTION_LINE_ITEM_TAX = "Tax";
+
+    //  Request Codes
+    public static final int REQUEST_CODE_MASKED_WALLET = 1001;
+    public static final int REQUEST_CODE_CHANGE_MASKED_WALLET = 1002;
+     /**
+     * Request code used when attempting to resolve issues with connecting to Google Play Services.
+     * Only use this request code when calling {@link ConnectionResult#startResolutionForResult(
+     *android.app.Activity, int)}.
+     */
+    public static final int REQUEST_CODE_RESOLVE_ERR = 1003;
+
+    /**
+     * Request code used when loading a full wallet. Only use this request code when calling
+     * {@link Wallet#loadFullWallet(GoogleApiClient, FullWalletRequest, int)}.
+     */
+    public static final int REQUEST_CODE_RESOLVE_LOAD_FULL_WALLET = 1004;
+
+    // Maximum number of times to try to connect to GoogleApiClient if the connection is failing
+    private static final int MAX_RETRIES = 3;
+    private static final long INITIAL_RETRY_DELAY_MILLISECONDS = 3000;
+    private static final int MESSAGE_RETRY_CONNECTION = 1010;
+    private static final String KEY_RETRY_COUNTER = "KEY_RETRY_COUNTER";
+    private static final String KEY_HANDLE_FULL_WALLET_WHEN_READY =
+            "KEY_HANDLE_FULL_WALLET_WHEN_READY";
+
+    // No. of times to retry loadFullWallet on receiving a ConnectionResult.INTERNAL_ERROR
+    private static final int MAX_FULL_WALLET_RETRIES = 1;
+    private static final String KEY_RETRY_FULL_WALLET_COUNTER = "KEY_RETRY_FULL_WALLET_COUNTER";
+
+
     private String mEnv;
     private GoogleApiClient mGoogleApiClient;
     public static final int FULL_WALLET_REQUEST_CODE = 889;
@@ -55,8 +104,8 @@ public class androidPay extends CordovaPlugin {
             String amount = data.getString(0);
             String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
-            maskedWalletRequest = createMaskedWalletRequest(amount);
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+            maskedWalletRequest = generateMaskedWalletRequest(amount);
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addOnConnectionFailedListener(this)
                 .enableAutoManage(this, 0, this)
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
@@ -113,35 +162,35 @@ public class androidPay extends CordovaPlugin {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case MASKED_WALLET_REQUEST_CODE:
+            case REQUEST_CODE_MASKED_WALLET:
                 switch (resultCode) {
-                    case RESULT_OK:
+                    case Activity.RESULT_OK:
                         mMaskedWallet =  data
                                 .getParcelableExtra(WalletConstants.EXTRA_MASKED_WALLET);
-                        Toast.makeText(this, "Got Masked Wallet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Got Masked Wallet", Toast.LENGTH_SHORT).show();
                         break;
-                    case RESULT_CANCELED:
+                    case Activity.RESULT_CANCELED:
                         // The user canceled the operation
                         break;
                     case WalletConstants.RESULT_ERROR:
-                        Toast.makeText(this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
                         // callbackContext.error("An Error Occurred!");
                         break;
                 }
                 break;
             case FULL_WALLET_REQUEST_CODE:
                 switch (resultCode) {
-                    case RESULT_OK:
+                    case Activity.RESULT_OK:
                         mFullWallet = data
                                 .getParcelableExtra(WalletConstants.EXTRA_FULL_WALLET);
                         // Show the credit card number
-                        Toast.makeText(this,
+                        Toast.makeText(getActivity(),
                                 "Got Full Wallet, Done!",
                                 Toast.LENGTH_SHORT).show();
                         // callbackContext.success(mFullWallet.getPaymentMethodToken());
                         break;
                     case WalletConstants.RESULT_ERROR:
-                        Toast.makeText(this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
                         // callbackContext.error("An Error Occurred during Full Wallet Request!");
                         break;
                 }
@@ -174,12 +223,12 @@ public class androidPay extends CordovaPlugin {
     }
 
     public void requestFullWallet() {
-      if (mMaskedWallet == null) {
-        Toast.makeText(this, "No masked wallet, can't confirm", Toast.LENGTH_SHORT).show();
+      if (maskedWalletRequest == null) {
+        Toast.makeText(getActivity(), "No masked wallet, can't confirm", Toast.LENGTH_SHORT).show();
         return;
       } 
       Wallet.Payments.loadFullWallet(mGoogleApiClient,
-          generateFullWalletRequest(mMaskedWallet.getGoogleTransactionId()),
+          generateFullWalletRequest(maskedWalletRequest.getGoogleTransactionId()),
           FULL_WALLET_REQUEST_CODE);
     }
 }
