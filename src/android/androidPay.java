@@ -101,12 +101,14 @@ public class androidPay extends CordovaPlugin {
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("buy")) {
-
+            Context context= this.cordova.getActivity().getApplicationContext(); 
             String amount = data.getString(0);
             String message = "Hello, " + amount;
             // createMaskedWalletRequest("0.01", callbackContext);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-            mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(context)
+                .addOnConnectionFailedListener(context)
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
                     .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
                     .setTheme(WalletConstants.THEME_LIGHT)
