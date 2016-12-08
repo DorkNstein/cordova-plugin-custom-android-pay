@@ -1,5 +1,4 @@
 package com.dorknstein.plugin;
-import com.dorknstein.plugin.CheckoutActivity;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
@@ -129,8 +128,8 @@ public class androidPay extends CordovaPlugin {
             String message = "Hello, " + amount;
 
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-            // Intent intent = CheckoutActivity.newIntent(context, amount, mEnv);
-            Intent intent = new Intent(context, CheckoutActivity.class);
+            Intent intent = CheckoutActivity.newIntent(context, amount, mEnv);
+            // Intent intent = new Intent(context, checkoutActivity.class);
             this.cordova.startActivityForResult((CordovaPlugin) this, intent, REQUEST_CODE_MASKED_WALLET);
             // Wallet.Payments.loadMaskedWallet(mGoogleApiClient, maskedWalletRequest, REQUEST_CODE_MASKED_WALLET);
             // callbackContext.success(message);

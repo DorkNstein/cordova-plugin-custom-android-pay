@@ -18,7 +18,7 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
             <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
-            <activity android:name=".CheckoutActivity"/>
+            <activity android:name=".checkoutActivity"/>
             <receiver android:name="com.google.android.gms.wallet.EnableWalletOptimizationReceiver" android:exported="false">
                 <intent-filter>
                     <action android:name="com.google.android.gms.wallet.ENABLE_WALLET_OPTIMIZATION" />
