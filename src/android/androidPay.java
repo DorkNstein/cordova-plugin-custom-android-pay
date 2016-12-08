@@ -1,5 +1,5 @@
 package com.dorknstein.plugin;
-package com.dorknstein.plugin.CheckoutActivity;
+import com.dorknstein.plugin.CheckoutActivity;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
