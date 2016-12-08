@@ -18,6 +18,7 @@
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
             <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
+            <activity android:name="CheckoutActivity"/>
             <receiver android:name="com.google.android.gms.wallet.EnableWalletOptimizationReceiver" android:exported="false">
                 <intent-filter>
                     <action android:name="com.google.android.gms.wallet.ENABLE_WALLET_OPTIMIZATION" />
@@ -30,5 +31,6 @@
             <uses-permission android:name="android.permission.USE_CREDENTIALS" />
         </config-file>
         <source-file src="src/android/androidPay.java" target-dir="src/com/dorknstein/plugin/" />
+        <source-file src="src/android/CheckoutActivity.java" target-dir="src/com/dorknstein/plugin/" />
     </platform>
 </plugin>

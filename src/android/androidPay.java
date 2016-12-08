@@ -103,6 +103,7 @@ public class androidPay extends CordovaPlugin {
     private static final String KEY_RETRY_FULL_WALLET_COUNTER = "KEY_RETRY_FULL_WALLET_COUNTER";
 
     private static final String TAG = "CheckoutActivity";
+    private SupportWalletFragment mWalletFragment;
     private String mEnv;
     private GoogleApiClient mGoogleApiClient;
     public static final int FULL_WALLET_REQUEST_CODE = 889;
@@ -125,33 +126,11 @@ public class androidPay extends CordovaPlugin {
         if (action.equals("buy")) {
             String amount = data.getString(0);
             String message = "Hello, " + amount;
-            // createMaskedWalletRequest("0.01", callbackContext);
-            WalletFragmentStyle walletFragmentStyle = new WalletFragmentStyle()
-                    .setBuyButtonText(WalletFragmentStyle.BuyButtonText.BUY_WITH)
-                    .setBuyButtonAppearance(WalletFragmentStyle.BuyButtonAppearance.ANDROID_PAY_DARK)
-                    .setBuyButtonWidth(WalletFragmentStyle.Dimension.MATCH_PARENT);
 
-            WalletFragmentOptions walletFragmentOptions = WalletFragmentOptions.newBuilder()
-                    .setEnvironment(Constants.ENVIRONMENT_TEST)
-                    .setFragmentStyle(walletFragmentStyle)
-                    .setTheme(WalletConstants.THEME_LIGHT)
-                    .setMode(WalletFragmentMode.BUY_BUTTON)
-                    .build();
-                    
-            mWalletFragment = SupportWalletFragment.newInstance(walletFragmentOptions);
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-
-            WalletFragmentInitParams.Builder startParamsBuilder = WalletFragmentInitParams.newBuilder()
-                    .setMaskedWalletRequest(maskedWalletRequest)
-                    .setMaskedWalletRequestCode(REQUEST_CODE_MASKED_WALLET)
-                    .setAccountName('Mendr');
-
-            mWalletFragment.initialize(startParamsBuilder.build());
-
-            getSupportFragmentManager().beginTransaction()
-                    .commit();
-
-            Wallet.Payments.loadMaskedWallet(mGoogleApiClient, maskedWalletRequest, REQUEST_CODE_MASKED_WALLET);
+            Intent intent = newIntent(context, amount, mEnv);
+            this.cordova.startActivityForResult((CordovaPlugin) this, intent);
+            // Wallet.Payments.loadMaskedWallet(mGoogleApiClient, maskedWalletRequest, REQUEST_CODE_MASKED_WALLET);
             // callbackContext.success(message);
             return true;
 
@@ -288,5 +267,12 @@ public class androidPay extends CordovaPlugin {
               .build())
           .build();
       return fullWalletRequest;
+    }
+
+    public static Intent newIntent(Context ctx, String amount, String env) {
+        Intent intent = new Intent(ctx, androidPay.class);
+        intent.putExtra(EXTRA_AMOUNT, amount);
+        intent.putExtra(EXTRA_ENV, env);
+        return intent;
     }
 }
