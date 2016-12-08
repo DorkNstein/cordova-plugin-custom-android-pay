@@ -128,8 +128,9 @@ public class androidPay extends CordovaPlugin {
             String message = "Hello, " + amount;
 
             maskedWalletRequest = generateMaskedWalletRequest(amount);
-            Intent intent = newIntent(context, amount, mEnv);
-            this.cordova.startActivityForResult((CordovaPlugin) this, intent);
+            // Intent intent = CheckoutActivity.newIntent(context, amount, mEnv);
+            Intent intent = new Intent(context, CheckoutActivity.class);
+            this.cordova.startActivityForResult((CordovaPlugin) this, intent, REQUEST_CODE_MASKED_WALLET);
             // Wallet.Payments.loadMaskedWallet(mGoogleApiClient, maskedWalletRequest, REQUEST_CODE_MASKED_WALLET);
             // callbackContext.success(message);
             return true;
@@ -267,12 +268,5 @@ public class androidPay extends CordovaPlugin {
               .build())
           .build();
       return fullWalletRequest;
-    }
-
-    public static Intent newIntent(Context ctx, String amount, String env) {
-        Intent intent = new Intent(ctx, androidPay.class);
-        intent.putExtra(EXTRA_AMOUNT, amount);
-        intent.putExtra(EXTRA_ENV, env);
-        return intent;
     }
 }
