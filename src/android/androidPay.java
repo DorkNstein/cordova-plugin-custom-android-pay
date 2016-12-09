@@ -118,6 +118,8 @@ public class androidPay extends CordovaPlugin {
         this.callbackContext = callbackContext;
         context = this.cordova.getActivity().getApplicationContext(); 
         mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(context)
+                .addOnConnectionFailedListener(context).
                 .addApi(Wallet.API, new Wallet.WalletOptions.Builder()
                     .setEnvironment(WalletConstants.ENVIRONMENT_TEST)
                     .setTheme(WalletConstants.THEME_LIGHT)
@@ -172,6 +174,22 @@ public class androidPay extends CordovaPlugin {
             return false;
 
         }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (!result.hasResolution()) {
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
+                    0).show();
+            return;
+        }
+
+        this.callbackContext.error("error message!");
+    }
+ 
+    @Override
+    public void onConnected(Bundle arg0) {
+         this.callbackContext.success("connected message!");
     }
 
     private MaskedWalletRequest generateMaskedWalletRequest(String amount) {
